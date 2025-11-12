@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MainActivity</string>
+    <string name="creditos_titulo">Créditos</string>
+    <string name="Gabriel_nome">Gabriel Fraga</string>
+    <string name="JoãoHenrique_nome">João Henrique Mendes</string>
+    <string name="Juan_Nome">Juan Willian</string>
 </resources>
