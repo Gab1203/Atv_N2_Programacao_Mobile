@@ -8,14 +8,14 @@
     tools:context=".CreditosActivity">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/JW"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/Juan_Nome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/JH" />
 
     <TextView
         android:id="@+id/textView"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/JH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/JoãoHenrique_nome"
@@ -39,11 +39,11 @@
         tools:layout_editor_absoluteY="256dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/Gabriel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Gabriel_nome"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toTopOf="@+id/JH"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
