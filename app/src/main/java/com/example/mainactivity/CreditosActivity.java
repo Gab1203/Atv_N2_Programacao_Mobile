@@ -1,5 +1,6 @@
 package com.example.mainactivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -17,7 +18,8 @@ public class CreditosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //gitHubUsername();
+        setContentView(R.layout.activity_creditos);
+        gitHubUsername();
     }
     public void gitHubUsername(){
         TextView textViewG = (TextView)findViewById(R.id.Gabriel);
@@ -35,9 +37,9 @@ public class CreditosActivity extends AppCompatActivity {
         String textJH = "<a href='https://github.com/HenrykMendes'>João Henrique Mendes</a>";
         String textJW = "<a href='https://github.com/JuanWillian'>Juan Willian</a>";
 
-        textViewG.setText(Html.fromHtml(textG));
-        textViewJH.setText(Html.fromHtml(textJH));
-        textViewJW.setText(Html.fromHtml(textJW));
+        textViewG.setText(Html.fromHtml(textG, Html.FROM_HTML_MODE_LEGACY));
+        textViewJH.setText(Html.fromHtml(textJH, Html.FROM_HTML_MODE_LEGACY));
+        textViewJW.setText(Html.fromHtml(textJW, Html.FROM_HTML_MODE_LEGACY));
 
     }
 }
