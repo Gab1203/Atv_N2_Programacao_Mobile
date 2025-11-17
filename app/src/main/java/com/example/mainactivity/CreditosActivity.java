@@ -3,6 +3,7 @@ package com.example.mainactivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -16,16 +17,19 @@ public class CreditosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gitHubUsername();
+        //gitHubUsername();
     }
     public void gitHubUsername(){
         TextView textViewG = (TextView)findViewById(R.id.Gabriel);
         TextView textViewJH = (TextView)findViewById(R.id.JH);
         TextView textViewJW = (TextView)findViewById(R.id.JW);
 
-        textViewG.setClickable(true); textViewG.setMovementMethod(LinkMovementMethod.getInstance());
-        textViewJH.setClickable(true); textViewJH.setMovementMethod((LinkMovementMethod.getInstance()));
-        textViewJW.setClickable(true); textViewJW.setMovementMethod((LinkMovementMethod.getInstance()));
+        textViewG.setClickable(true);
+        textViewG.setMovementMethod(LinkMovementMethod.getInstance());
+        textViewJH.setClickable(true);
+        textViewJH.setMovementMethod((LinkMovementMethod.getInstance()));
+        textViewJW.setClickable(true);
+        textViewJW.setMovementMethod((LinkMovementMethod.getInstance()));
 
         String textG = "<a href='https://github.com/Gab1203'>Gabriel Fraga</a>";
         String textJH = "<a href='https://github.com/HenrykMendes'>João Henrique Mendes</a>";

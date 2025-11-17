@@ -4,4 +4,5 @@
     <string name="Gabriel_nome">Gabriel Fraga</string>
     <string name="JoãoHenrique_nome">João Henrique Mendes</string>
     <string name="Juan_Nome">Juan Willian</string>
+    <string name="title_activity_registrar_trilha">RegistrarTrilha</string>
 </resources>
