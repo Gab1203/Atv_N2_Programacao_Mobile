@@ -25,7 +25,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAtGS3c_oW-DMvkdeULESwMCWOlOrz_CZQ" />
+            android:value="${maps_apiKey}" />
 
         <activity
             android:name=".RegistrarTrilhaActivity"
