@@ -5,4 +5,11 @@
     <string name="JoãoHenrique_nome">João Henrique Mendes</string>
     <string name="Juan_Nome">Juan Willian</string>
     <string name="title_activity_registrar_trilha">RegistrarTrilha</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="iniciar">Iniciar</string>
+    <string name="_0_kcal">0 kcal</string>
+    <string name="_00_00_00">00:00:00</string>
+    <string name="dist_ncia_0_m">Distância: 0 m</string>
+    <string name="velocidade_m_xima_0_km_h">Velocidade Máxima: 0 km/h</string>
+    <string name="velocidade_0_km_h">Velocidade: 0 km/h</string>
 </resources>
