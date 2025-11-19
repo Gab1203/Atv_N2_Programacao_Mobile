@@ -13,7 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MainActivity">
-
+        <activity
+            android:name=".EditarTrilhaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConsultarTrilha"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -30,7 +35,7 @@
             android:value="YOUR_API_KEY" />
 
         <activity
-            android:name=".VizualizarActivity"
+            android:name=".VisualizarTrilhaActivity"
             android:exported="false"
             android:label="@string/title_activity_vizualizar" />
         <activity

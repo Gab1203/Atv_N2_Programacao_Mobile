@@ -19,7 +19,6 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // Tabela trilha
         db.execSQL("CREATE TABLE " + TABLE_TRILHA + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "nome TEXT NOT NULL," +
@@ -34,7 +33,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 ");"
         );
 
-        // Tabela trilha_pontos
         db.execSQL("CREATE TABLE " + TABLE_PONTOS + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "trilha_id INTEGER NOT NULL," +
@@ -50,7 +48,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // caso futuro
     }
 }
 

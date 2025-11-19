@@ -13,4 +13,11 @@
     <string name="velocidade_m_xima_0_km_h">Velocidade Máxima: 0 km/h</string>
     <string name="velocidade_0_km_h">Velocidade: 0 km/h</string>
     <string name="title_activity_vizualizar">VizualizarActivity</string>
+    <string name="registrar_trilha">Registrar Trilha</string>
+    <string name="visualizar_trilha">Visualizar Trilha</string>
+    <string name="cr_ditos">Créditos</string>
+    <string name="configura_o">Configuração</string>
+    <string name="tela_principal">Tela Principal</string>
+    <string name="nome_da_trilha">Nome da Trilha</string>
+    <string name="data_dist_ncia_velocidade_m_dia">Data • Distância • Velocidade Média</string>
 </resources>

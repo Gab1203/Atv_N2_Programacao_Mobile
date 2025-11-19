@@ -77,6 +77,19 @@ public class TrilhaDAO {
         return trilhas;
     }
 
+    public void atualizarCamposIniciais(Trilha trilha) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("nome", trilha.getNome());
+        cv.put("data_inicio", trilha.getDataInicio());
+        cv.put("hora_inicio", trilha.getHoraInicio());
+
+        db.update(DbHelper.TABLE_TRILHA, cv, "id = ?", new String[]{String.valueOf(trilha.getId())});
+        db.close();
+    }
+
+
     private Trilha cursorParaTrilha(Cursor c) {
         Trilha t = new Trilha();
         t.setId(c.getLong(c.getColumnIndexOrThrow("id")));
