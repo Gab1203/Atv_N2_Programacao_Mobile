@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import com.example.mainactivity.dao.PontoTrilhaDAO;
 import com.example.mainactivity.dao.TrilhaDAO;
+import com.example.mainactivity.databinding.ActivityRegistrarTrilhaBinding;
 import com.example.mainactivity.model.PontoTrilha;
 
 import com.example.mainactivity.model.Trilha;
@@ -24,15 +25,19 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.List;
 
 public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -56,17 +61,20 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     private TextView txtDistancia;
     private TextView txtTempo;
     private TextView txtKcal;
-
+    private Circle accuracyCircle;
     private long startTime;
     private float distanciaTotal = 0f;
     private float velocidadeMax = 0f;
     private Location ultimaLocation = null;
 
+    Button btnIniciar;
+    Button btnFinalizar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.example.mainactivity.databinding.ActivityRegistrarTrilhaBinding binding =
-                com.example.mainactivity.databinding.ActivityRegistrarTrilhaBinding.inflate(getLayoutInflater());
+        ActivityRegistrarTrilhaBinding binding =
+                ActivityRegistrarTrilhaBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         txtVelocidade = binding.txtVelocidade;
@@ -75,8 +83,8 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         txtTempo = binding.txtTempo;
         txtKcal = binding.txtKcal;
 
-        Button btnIniciar = findViewById(R.id.Startbutton);
-        Button btnFinalizar = findViewById(R.id.Stopbutton);
+         btnIniciar = findViewById(R.id.Startbutton);
+         btnFinalizar = findViewById(R.id.Stopbutton);
 
         trilhaDAO = new TrilhaDAO(this);
         pontoDAO = new PontoTrilhaDAO(this);
@@ -102,6 +110,8 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     }
 
     private void iniciarTrilha() {
+        btnIniciar.setEnabled(false);
+        btnFinalizar.setEnabled(true);
 
         trilha = new Trilha();
         trilha.setNome("Trilha " + System.currentTimeMillis());
@@ -132,7 +142,9 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
             return;
         }
 
-        locationRequest = new LocationRequest.Builder(1000).build();
+        locationRequest = new LocationRequest.Builder(1000)
+                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                .build();
 
         locationCallback = new LocationCallback() {
             @Override
@@ -150,14 +162,23 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         LatLng ponto = new LatLng(loc.getLatitude(), loc.getLongitude());
 
         // desenhar no mapa
-        polyline.getPoints().add(ponto);
+        List<LatLng> pts = polyline.getPoints();
+        pts.add(ponto);
+        polyline.setPoints(pts);
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ponto, 17));
 
         // círculo de acurácia
-        mMap.addCircle(new CircleOptions()
-                .center(ponto)
-                .radius(loc.getAccuracy())
-                .strokeColor(Color.RED));
+        if (accuracyCircle == null) {
+            accuracyCircle = mMap.addCircle(new CircleOptions()
+                    .strokeColor(Color.RED)
+                    .radius(loc.getAccuracy())
+                    .center(ponto));
+        } else {
+            accuracyCircle.setCenter(ponto);
+            accuracyCircle.setRadius(loc.getAccuracy());
+        }
+
 
         // calculo distancia
         if (ultimaLocation != null) {
