@@ -43,6 +43,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ConfiguracaoActivity.class));
             }
         });
+
+        visualizarTrilhaBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), VisualizarTrilhaActivity.class));
+            }
+        });
     }
 
 
