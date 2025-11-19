@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mainactivity.adapter.TrilhaAdapter;
+import com.example.mainactivity.TrilhaAdapter;
 import com.example.mainactivity.dao.TrilhaDAO;
 import com.example.mainactivity.model.Trilha;
 

@@ -1,4 +1,4 @@
-package com.example.mainactivity.adapter;
+package com.example.mainactivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -71,8 +71,8 @@ public class TrilhaAdapter extends RecyclerView.Adapter<TrilhaAdapter.TrilhaView
         public TrilhaViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            nome = itemView.findViewById(R.id.txtNome);
-            data = itemView.findViewById(R.id.txtData);
+            nome = itemView.findViewById(R.id.txtNomeTrilha);
+            data = itemView.findViewById(R.id.tvDataTrilha);
 
             btnEditar = itemView.findViewById(R.id.btnEditar);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
