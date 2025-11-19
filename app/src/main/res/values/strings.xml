@@ -12,4 +12,5 @@
     <string name="dist_ncia_0_m">Distância: 0 m</string>
     <string name="velocidade_m_xima_0_km_h">Velocidade Máxima: 0 km/h</string>
     <string name="velocidade_0_km_h">Velocidade: 0 km/h</string>
+    <string name="title_activity_vizualizar">VizualizarActivity</string>
 </resources>

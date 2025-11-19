@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -26,8 +27,12 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${maps_apiKey}" />
+            android:value="YOUR_API_KEY" />
 
+        <activity
+            android:name=".VizualizarActivity"
+            android:exported="false"
+            android:label="@string/title_activity_vizualizar" />
         <activity
             android:name=".RegistrarTrilhaActivity"
             android:exported="false"
