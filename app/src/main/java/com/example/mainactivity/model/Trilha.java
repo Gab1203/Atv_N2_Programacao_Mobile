@@ -1,5 +1,8 @@
 package com.example.mainactivity.model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,44 @@ public class Trilha {
     private double velocidadeMedia;
     private double velocidadeMaxima;
     private List<PontoTrilha> pontos = new ArrayList<>();
+
+    public String toJson() {
+        try {
+            JSONObject obj = new JSONObject();
+
+            obj.put("id", id);
+            obj.put("nome", nome);
+
+            obj.put("dataInicio", dataInicio);
+            obj.put("horaInicio", horaInicio);
+            obj.put("dataFim", dataFim);
+            obj.put("horaFim", horaFim);
+
+            obj.put("distanciaPercorrida", distanciaPercorrida);
+            obj.put("velocidadeMedia", velocidadeMedia);
+            obj.put("velocidadeMaxima", velocidadeMaxima);
+            obj.put("gastoKcal", gastoKcal);
+
+            //todoa os pontos percorridos
+            JSONArray pontosArray = new JSONArray();
+            for (PontoTrilha p : pontos) {
+                JSONObject pObj = new JSONObject();
+                pObj.put("latitude", p.getLatitude());
+                pObj.put("longitude", p.getLongitude());
+                pObj.put("velocidade", p.getVelocidade());
+                pObj.put("acuracia", p.getAcuracia());
+                pObj.put("dataHora", p.getDataHora());
+
+                pontosArray.put(pObj);
+            }
+
+            obj.put("pontos", pontosArray);
+
+            return obj.toString(4);
+        } catch (Exception e) {
+            return "{}";
+        }
+    }
 
     public long getId() {
         return id;
