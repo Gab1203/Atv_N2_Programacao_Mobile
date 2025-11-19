@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mainactivity.databinding.ActivityVizualizarBinding;
 
-public class VizualizarActivity extends FragmentActivity implements OnMapReadyCallback {
+public class VisualizarActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityVizualizarBinding binding;
