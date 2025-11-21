@@ -11,6 +11,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_TRILHA = "trilha";
     public static final String TABLE_PONTOS = "trilha_pontos";
+    public static final String TABLE_USUARIO = "usuario";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,6 +43,15 @@ public class DbHelper extends SQLiteOpenHelper {
                 "accuracy REAL," +
                 "data_hora TEXT," +
                 "FOREIGN KEY(trilha_id) REFERENCES trilha(id)" +
+                ");"
+        );
+
+        db.execSQL("CREATE TABLE " + TABLE_USUARIO + "("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "data_nascimento TEXT," +
+                "sexo TEXT," +
+                "altura TEXT,"+
+                "peso TEXT" +
                 ");"
         );
     }
