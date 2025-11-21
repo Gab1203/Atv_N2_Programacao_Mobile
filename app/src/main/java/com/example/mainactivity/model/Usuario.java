@@ -1,16 +1,26 @@
 package com.example.mainactivity.model;
 
 public class Usuario {
+    private String nome;
     private String dataNascimento;
     private String sexo;
     private double altura;
     private double peso;
 
-    public Usuario(String dataNascimento, String sexo, double altura, double peso) {
+    public Usuario(String nome, String dataNascimento, String sexo, double altura, double peso) {
+        this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.sexo = sexo;
         this.altura = altura;
         this.peso = peso;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDataNascimento() {

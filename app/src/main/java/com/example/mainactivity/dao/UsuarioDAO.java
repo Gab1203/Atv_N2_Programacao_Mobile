@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.mainactivity.db.DbHelper;
-import com.example.mainactivity.model.Trilha;
 import com.example.mainactivity.model.Usuario;
 
 public class UsuarioDAO {
@@ -19,6 +18,7 @@ public class UsuarioDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
+        cv.put("nome", usuario.getNome());
         cv.put("data_nascimento", usuario.getDataNascimento());
         cv.put("altura", usuario.getAltura());
         cv.put("peso", usuario.getPeso());
