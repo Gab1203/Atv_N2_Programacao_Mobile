@@ -12,7 +12,7 @@ val localPropertiesFile = rootProject.file("local.properties")
 if(localPropertiesFile.exists())
     localProperties.load(FileInputStream(localPropertiesFile))
 
-val maps_api = localProperties.getProperty("MAPS_API")
+val maps_api = localProperties.getProperty("MAPS_API_KEY")
 
 android {
     namespace = "com.example.mainactivity"

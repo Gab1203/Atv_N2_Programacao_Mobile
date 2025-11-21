@@ -20,4 +20,5 @@
     <string name="tela_principal">Tela Principal</string>
     <string name="nome_da_trilha">Nome da Trilha</string>
     <string name="data_dist_ncia_velocidade_m_dia">Data • Distância • Velocidade Média</string>
+    <string name="title_activity_visualizar" />
 </resources>
