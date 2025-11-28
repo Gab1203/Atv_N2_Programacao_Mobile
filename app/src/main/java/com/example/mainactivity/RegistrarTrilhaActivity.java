@@ -96,7 +96,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
 
        private void iniciarTrilha() {
         if (usuario == null) {
-            Toast.makeText(this, "Configure o usuário primeiro.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.configure_usuario_primeiro), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -114,7 +114,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
 
         iniciarLocalizacao();
 
-        Toast.makeText(this, "Trilha iniciada!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.trilha_iniciada), Toast.LENGTH_SHORT).show();
     }
 
     private void finalizarTrilha() {
@@ -137,7 +137,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
 
         trilhaDAO.atualizarTrilha(trilha);
 
-        Toast.makeText(this, "Trilha finalizada e salva!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.trilha_finalizada_salva), Toast.LENGTH_LONG).show();
         finish();
     }
 

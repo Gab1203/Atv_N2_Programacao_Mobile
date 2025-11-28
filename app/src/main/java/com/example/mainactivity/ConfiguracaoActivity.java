@@ -98,23 +98,23 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         int idSexo = sexo.getCheckedRadioButtonId();
 
         if (nomeUsuario.getText().toString().trim().isEmpty()) {
-            nomeUsuario.setError("Informe o nome");
+            nomeUsuario.setError(getString(R.string.informe_nome));
             return;
         }
 
         if (dataNascimento.getText().toString().trim().isEmpty()) {
-            dataNascimento.setError("Informe a data de nascimento");
+            dataNascimento.setError(getString(R.string.informe_data_nascimento));
             return;
         }
 
         if (idSexo == -1) {
-            Toast.makeText(this, "Selecione o sexo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.selecionar_sexo), Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (altura.getText().toString().trim().isEmpty() ||
                 peso.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Informe altura e peso", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.informe_altura_peso), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -152,6 +152,6 @@ public class ConfiguracaoActivity extends AppCompatActivity {
 
         ed.apply();
 
-        Toast.makeText(this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.configuracoes_salvas), Toast.LENGTH_SHORT).show();
     }
 }
