@@ -10,7 +10,7 @@
         android:id="@+id/text_config"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Configurações"
+        android:text="@string/configuracoes"
         android:textSize="22sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         android:id="@+id/usuario_dados"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dados do usuário"
+        android:text="@string/dados_do_usuario"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/text_config"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,13 +75,13 @@
             android:id="@+id/sexo_masculino"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Masculino"/>
+            android:text="@string/masculino"/>
 
         <RadioButton
             android:id="@+id/sexo_feminino"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Feminino"/>
+            android:text="@string/feminino"/>
     </RadioGroup>
 
     <EditText
@@ -99,7 +99,7 @@
         android:id="@+id/config_maps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Configurações de localização"
+        android:text="@string/configuracoes_localizacao"
         app:layout_constraintTop_toBottomOf="@+id/data_nascimento"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +109,7 @@
         android:id="@+id/form_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tipo de mapa"
+        android:text="@string/tipo_mapa"
         app:layout_constraintTop_toBottomOf="@+id/config_maps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,20 +128,20 @@
             android:id="@+id/map_satelite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Satélite"/>
+            android:text="@string/satelite"/>
 
         <RadioButton
             android:id="@+id/map_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vetorial"/>
+            android:text="@string/vetorial"/>
     </RadioGroup>
 
     <TextView
         android:id="@+id/form_nav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forma de navegação"
+        android:text="@string/forma_navegacao"
         app:layout_constraintTop_toBottomOf="@+id/map_group"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -160,20 +160,20 @@
             android:id="@+id/nav_course_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Course Up"/>
+            android:text="@string/course_up"/>
 
         <RadioButton
             android:id="@+id/nav_north_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="North Up"/>
+            android:text="@string/north_up"/>
     </RadioGroup>
 
     <Button
         android:id="@+id/btnSalvar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Salvar"
+        android:text="@string/salvar"
         app:layout_constraintTop_toBottomOf="@+id/nav_group"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

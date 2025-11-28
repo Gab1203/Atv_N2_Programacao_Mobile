@@ -16,7 +16,7 @@
             android:id="@+id/tvTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Detalhes da Trilha"
+            android:text="@string/detalhes_trilha"
             android:textStyle="bold"
             android:textSize="22sp"
             android:padding="4dp"
@@ -39,7 +39,7 @@
                     android:id="@+id/tvNomeTrilha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nome da Trilha"
+                    android:text="@string/nome_da_trilha"
                     android:textStyle="bold"
                     android:textSize="20sp"/>
 
@@ -47,35 +47,35 @@
                     android:id="@+id/tvDataTrilha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Início: --"
+                    android:text="@string/inicio_placeholder"
                     android:layout_marginTop="6dp"/>
 
                 <TextView
                     android:id="@+id/tvDistancia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Distância: --"
+                    android:text="@string/distancia_placeholder"
                     android:layout_marginTop="6dp"/>
 
                 <TextView
                     android:id="@+id/tvDuracao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Duração: --"
+                    android:text="@string/duracao_placeholder"
                     android:layout_marginTop="6dp"/>
 
                 <TextView
                     android:id="@+id/tvVelocidadeMedia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Velocidade média: --"
+                    android:text="@string/vel_media_placeholder"
                     android:layout_marginTop="6dp"/>
 
                 <TextView
                     android:id="@+id/tvVelocidadeMaxima"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Velocidade máxima: --"
+                    android:text="@string/vel_max_placeholder"
                     android:layout_marginTop="6dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mapa da Trilha"
+            android:text="@string/mapa_da_trilha"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginTop="20dp"/>
