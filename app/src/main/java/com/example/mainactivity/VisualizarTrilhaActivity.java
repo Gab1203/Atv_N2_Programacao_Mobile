@@ -11,6 +11,7 @@ import com.example.mainactivity.dao.TrilhaDAO;
 import com.example.mainactivity.model.PontoTrilha;
 import com.example.mainactivity.model.Trilha;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import android.content.SharedPreferences;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -82,6 +83,14 @@ public class VisualizarTrilhaActivity extends AppCompatActivity implements OnMap
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.map = googleMap;
+
+         SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
+        String mapType = prefs.getString("mapType", "vetorial");
+        if ("satellite".equals(mapType)) {
+            map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        } else {
+            map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
 
         if (pontos == null || pontos.isEmpty()) return;
 

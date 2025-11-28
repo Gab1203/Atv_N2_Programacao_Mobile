@@ -72,7 +72,7 @@ public class TrilhaAdapter extends RecyclerView.Adapter<TrilhaAdapter.TrilhaView
             super(itemView);
 
             nome = itemView.findViewById(R.id.txtNomeTrilha);
-            data = itemView.findViewById(R.id.tvDataTrilha);
+            data = itemView.findViewById(R.id.txtInfoTrilha);
 
             btnEditar = itemView.findViewById(R.id.btnEditar);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);

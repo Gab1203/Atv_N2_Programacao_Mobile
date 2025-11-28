@@ -1,18 +1,20 @@
 package com.example.mainactivity.model;
 
 public class Usuario {
+    private long id;
     private String nome;
     private String dataNascimento;
     private String sexo;
     private double altura;
     private double peso;
 
-    public Usuario(String nome, String dataNascimento, String sexo, double altura, double peso) {
-        this.nome = nome;
-        this.dataNascimento = dataNascimento;
-        this.sexo = sexo;
-        this.altura = altura;
-        this.peso = peso;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -53,5 +55,16 @@ public class Usuario {
 
     public void setPeso(double peso) {
         this.peso = peso;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nome='" + nome + '\'' +
+                ", dataNascimento='" + dataNascimento + '\'' +
+                ", sexo='" + sexo + '\'' +
+                ", altura=" + altura +
+                ", peso=" + peso +
+                '}';
     }
 }
