@@ -21,4 +21,57 @@
     <string name="nome_da_trilha">Nome da Trilha</string>
     <string name="data_dist_ncia_velocidade_m_dia">Data • Distância • Velocidade Média</string>
     <string name="title_activity_visualizar" />
+    <string name="configuracoes">Configurações</string>
+    <string name="dados_do_usuario">Dados do usuário</string>
+    <string name="masculino">Masculino</string>
+    <string name="feminino">Feminino</string>
+    <string name="configuracoes_localizacao">Configurações de localização</string>
+    <string name="tipo_mapa">Tipo de mapa</string>
+    <string name="satelite">Satélite</string>
+    <string name="vetorial">Vetorial</string>
+    <string name="forma_navegacao">Forma de navegação</string>
+    <string name="course_up">Course Up</string>
+    <string name="north_up">North Up</string>
+    <string name="salvar">Salvar</string>
+
+    <string name="detalhes_trilha">Detalhes da Trilha</string>
+    <string name="inicio_placeholder">Início: --</string>
+    <string name="distancia_placeholder">Distância: --</string>
+    <string name="duracao_placeholder">Duração: --</string>
+    <string name="vel_media_placeholder">Velocidade média: --</string>
+    <string name="vel_max_placeholder">Velocidade máxima: --</string>
+    <string name="mapa_da_trilha">Mapa da Trilha</string>
+
+    <string name="consultar_trilhas">Consultar Trilhas</string>
+    <string name="salvar_alteracoes">Salvar alterações</string>
+
+    <!-- Dialogs and toasts -->
+    <string name="selecionar_sexo">Selecione o sexo</string>
+    <string name="informe_altura_peso">Informe altura e peso</string>
+    <string name="configuracoes_salvas">Configurações salvas!</string>
+    <string name="configure_usuario_primeiro">Configure o usuário primeiro.</string>
+    <string name="trilha_iniciada">Trilha iniciada!</string>
+    <string name="trilha_finalizada_salva">Trilha finalizada e salva!</string>
+    <string name="todas_trilhas_apagadas">Todas as trilhas foram apagadas.</string>
+    <string name="erro_compartilhar">Erro ao compartilhar: %1$s</string>
+    <string name="trilha_apagada">Trilha apagada.</string>
+    <string name="erro_carregar_trilha">Erro ao carregar trilha</string>
+    <string name="trilha_atualizada">Trilha atualizada!</string>
+
+    <string name="excluir_tudo_titulo">Excluir tudo?</string>
+    <string name="excluir_tudo_msg">Isso removerá todas as trilhas registradas. Deseja continuar?</string>
+    <string name="sim">Sim</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="excluir_trilha_titulo">Excluir trilha</string>
+    <string name="excluir_trilha_msg">Deseja apagar a trilha "%1$s"?</string>
+    <string name="compartilhar_trilha">Compartilhar trilha</string>
+    <string name="menu_excluir_tudo">Excluir todas as trilhas</string>
+    <string name="menu_excluir_intervalo">Excluir trilhas por intervalo</string>
+    <string name="menu_exportar_json">Exportar trilha (JSON)</string>
+    <string name="informe_nome">Informe o nome</string>
+    <string name="informe_data_nascimento">Informe a data de nascimento</string>
+    <string name="excluir_intervalo_titulo">Excluir por intervalo</string>
+    <string name="excluir_intervalo_msg">Apagar trilhas entre %1$s e %2$s?</string>
+    <string name="trilhas_intervalo_apagadas">Trilhas no intervalo apagadas.</string>
+
 </resources>

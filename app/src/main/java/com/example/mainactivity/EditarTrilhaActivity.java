@@ -39,7 +39,7 @@ public class EditarTrilhaActivity extends AppCompatActivity {
         trilha = trilhaDAO.buscarPorId(trilhaId);
 
         if (trilha == null) {
-            Toast.makeText(this, "Erro ao carregar trilha", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.erro_carregar_trilha), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -96,7 +96,7 @@ public class EditarTrilhaActivity extends AppCompatActivity {
         String hora = edtHora.getText().toString().trim();
 
         if (nome.isEmpty()) {
-            edtNome.setError("Informe o nome");
+            edtNome.setError(getString(R.string.informe_nome));
             return;
         }
 
@@ -106,7 +106,7 @@ public class EditarTrilhaActivity extends AppCompatActivity {
 
         trilhaDAO.atualizarCamposIniciais(trilha);
 
-        Toast.makeText(this, "Trilha atualizada!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.trilha_atualizada), Toast.LENGTH_SHORT).show();
         finish();
     }
 }

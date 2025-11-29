@@ -10,6 +10,10 @@ import com.example.mainactivity.model.Trilha;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class TrilhaDAO {
 
@@ -17,6 +21,42 @@ public class TrilhaDAO {
 
     public TrilhaDAO(Context context) {
         dbHelper = new DbHelper(context);
+    }
+
+    public void apagarPorIntervalo(String inicio, String fim) {
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            Date dInicio = fmt.parse(inicio);
+            Date dFim = fmt.parse(fim);
+
+            if (dInicio == null || dFim == null) return;
+
+            if (dInicio.after(dFim)) {
+                Date tmp = dInicio;
+                dInicio = dFim;
+                dFim = tmp;
+            }
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            List<Trilha> todas = listar();
+            for (Trilha t : todas) {
+                try {
+                    Date d = fmt.parse(t.getDataInicio());
+                    if (d != null && !d.before(dInicio) && !d.after(dFim)) {
+                        db.delete(DbHelper.TABLE_TRILHA, "id = ?", new String[]{String.valueOf(t.getId())});
+                        db.delete("trilha_pontos", "trilha_id = ?", new String[]{String.valueOf(t.getId())});
+                    }
+                } catch (ParseException e) {
+
+                }
+            }
+
+            db.close();
+
+        } catch (ParseException e) {
+
+        }
     }
 
     public long inserirTrilha(Trilha trilha) {

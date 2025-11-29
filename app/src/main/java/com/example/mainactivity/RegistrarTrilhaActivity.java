@@ -1,241 +1,304 @@
 package com.example.mainactivity;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.mainactivity.dao.PontoTrilhaDAO;
 import com.example.mainactivity.dao.TrilhaDAO;
-import com.example.mainactivity.databinding.ActivityRegistrarTrilhaBinding;
+import com.example.mainactivity.dao.UsuarioDAO;
 import com.example.mainactivity.model.PontoTrilha;
-
 import com.example.mainactivity.model.Trilha;
+import com.example.mainactivity.model.Usuario;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-
-import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.CameraPosition;
+import android.content.SharedPreferences;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    private static final int REQ_LOCATION = 100;
 
+    private GoogleMap mMap;
     private FusedLocationProviderClient locationClient;
     private LocationCallback locationCallback;
-    private LocationRequest locationRequest;
 
+    private TextView txtVelocidade, txtDistancia, txtTempo, txtVelocidadeMax, txtKcal;
+    private Button btnIniciar, btnFinalizar;
+
+    private boolean trilhaIniciada = false;
+
+    private long trilhaId;
     private Trilha trilha;
     private TrilhaDAO trilhaDAO;
     private PontoTrilhaDAO pontoDAO;
+    private Usuario usuario;
 
-    private Polyline polyline;
+    private Location ultimaLocation;
+    private double distanciaTotal = 0;
+    private double velocidadeMax = 0;
 
-    private static final int PERMISSION_REQUEST = 10;
-
-    // UI
-    private TextView txtVelocidade;
-    private TextView txtVelocidadeMax;
-    private TextView txtDistancia;
-    private TextView txtTempo;
-    private TextView txtKcal;
-    private Circle accuracyCircle;
-    private long startTime;
-    private float distanciaTotal = 0f;
-    private float velocidadeMax = 0f;
-    private Location ultimaLocation = null;
-
-    Button btnIniciar;
-    Button btnFinalizar;
+    private long tempoInicio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityRegistrarTrilhaBinding binding =
-                ActivityRegistrarTrilhaBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        txtVelocidade = binding.txtVelocidade;
-        txtVelocidadeMax = binding.txtVelocidadeMax;
-        txtDistancia = binding.txtDistancia;
-        txtTempo = binding.txtTempo;
-        txtKcal = binding.txtKcal;
-
-         btnIniciar = findViewById(R.id.Startbutton);
-         btnFinalizar = findViewById(R.id.Stopbutton);
+        setContentView(R.layout.activity_registrar_trilha);
 
         trilhaDAO = new TrilhaDAO(this);
         pontoDAO = new PontoTrilhaDAO(this);
 
-        locationClient = LocationServices.getFusedLocationProviderClient(this);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(this);
+        usuario = usuarioDAO.buscarPrimeiroUsuario();
 
-        //inicializa o mapa
+        txtVelocidade = findViewById(R.id.txtVelocidade);
+        txtDistancia = findViewById(R.id.txtDistancia);
+        txtTempo = findViewById(R.id.txtTempo);
+        txtVelocidadeMax = findViewById(R.id.txtVelocidadeMax);
+        txtKcal = findViewById(R.id.txtKcal);
+
+        btnIniciar = findViewById(R.id.Startbutton);
+        btnFinalizar = findViewById(R.id.Stopbutton);
+
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         btnIniciar.setOnClickListener(v -> iniciarTrilha());
         btnFinalizar.setOnClickListener(v -> finalizarTrilha());
-    }
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        polyline = mMap.addPolyline(new PolylineOptions()
-                .color(Color.BLUE)
-                .width(10f));
+        locationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-    private void iniciarTrilha() {
-        btnIniciar.setEnabled(false);
-        btnFinalizar.setEnabled(true);
-
-        trilha = new Trilha();
-        trilha.setNome("Trilha " + System.currentTimeMillis());
-        trilha.setDataInicio(DataUtil.getDataAtual());
-        trilha.setHoraInicio(DataUtil.getHoraAtual());
-
-        long id = trilhaDAO.inserirTrilha(trilha);
-        trilha.setId(id);
-
-        Toast.makeText(this, "Trilha iniciada!", Toast.LENGTH_SHORT).show();
-
-        startTime = System.currentTimeMillis();
-
-        iniciarLocalizacao();
-    }
-
-    //aq ele solicita a localização
-    private void iniciarLocalizacao() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSION_REQUEST
-            );
+       private void iniciarTrilha() {
+        if (usuario == null) {
+            Toast.makeText(this, getString(R.string.configure_usuario_primeiro), Toast.LENGTH_LONG).show();
             return;
         }
 
-        locationRequest = new LocationRequest.Builder(1000)
-                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                .build();
+        trilha = new Trilha();
+        trilha.setNome("Trilha " + new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+        trilha.setDataInicio(dataAtual());
+        trilha.setHoraInicio(horaAtual());
+
+        trilhaId = trilhaDAO.inserirTrilha(trilha);
+
+        trilha.setId(trilhaId);
+
+        trilhaIniciada = true;
+        tempoInicio = SystemClock.elapsedRealtime();
+
+        iniciarLocalizacao();
+
+        Toast.makeText(this, getString(R.string.trilha_iniciada), Toast.LENGTH_SHORT).show();
+    }
+
+    private void finalizarTrilha() {
+        if (!trilhaIniciada) return;
+
+        trilhaIniciada = false;
+
+        trilha.setDataFim(dataAtual());
+        trilha.setHoraFim(horaAtual());
+        trilha.setDistanciaPercorrida(distanciaTotal);
+        trilha.setVelocidadeMaxima(velocidadeMax);
+
+        long timeElapsed = SystemClock.elapsedRealtime() - tempoInicio;
+        double horas = timeElapsed / 3600000.0;
+        double vm = distanciaTotal / horas;
+        trilha.setVelocidadeMedia(vm);
+
+        double kcal = calcularGastoCalorico(distanciaTotal, usuario.getPeso());
+        trilha.setGastoKcal(kcal);
+
+        trilhaDAO.atualizarTrilha(trilha);
+
+        Toast.makeText(this, getString(R.string.trilha_finalizada_salva), Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+
+    private void iniciarLocalizacao() {
+        if (!temPermissao()) {
+            pedirPermissao();
+            return;
+        }
+
+        LocationRequest req = LocationRequest.create();
+        req.setInterval(1000);
+        req.setFastestInterval(500);
+        req.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult result) {
-                Location loc = result.getLastLocation();
-                if (loc != null) processarLocalizacao(loc);
+                for (Location loc : result.getLocations()) {
+                    atualizarLocalizacao(loc);
+                }
             }
         };
 
-        locationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationClient.requestLocationUpdates(req, locationCallback, getMainLooper());
     }
 
-    private void processarLocalizacao(Location loc) {
+    private void atualizarLocalizacao(Location loc) {
+        if (loc == null || !trilhaIniciada) return;
 
-        LatLng ponto = new LatLng(loc.getLatitude(), loc.getLongitude());
+    LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
 
-        // desenhar no mapa
-        List<LatLng> pts = polyline.getPoints();
-        pts.add(ponto);
-        polyline.setPoints(pts);
+     SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
+    String navMode = prefs.getString("navMode", "north_up");
+    float zoom = 18f;
+    if ("course_up".equals(navMode) && ultimaLocation != null) {
+        float bearing = ultimaLocation.bearingTo(loc);
+        CameraPosition camPos = new CameraPosition.Builder()
+            .target(pos)
+            .zoom(zoom)
+            .bearing(bearing)
+            .tilt(0)
+            .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+    } else {
+        CameraPosition camPos = new CameraPosition.Builder()
+            .target(pos)
+            .zoom(zoom)
+            .bearing(0)
+            .tilt(0)
+            .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+    }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ponto, 17));
-
-        // círculo de acurácia
-        if (accuracyCircle == null) {
-            accuracyCircle = mMap.addCircle(new CircleOptions()
-                    .strokeColor(Color.RED)
-                    .radius(loc.getAccuracy())
-                    .center(ponto));
-        } else {
-            accuracyCircle.setCenter(ponto);
-            accuracyCircle.setRadius(loc.getAccuracy());
-        }
-
-
-        // calculo distancia
         if (ultimaLocation != null) {
-            distanciaTotal += ultimaLocation.distanceTo(loc);
+            float d = ultimaLocation.distanceTo(loc); // metros
+            distanciaTotal += d;
+
+            double v = loc.getSpeed() * 3.6; // km/h
+            velocidadeMax = Math.max(velocidadeMax, v);
+
+            txtVelocidade.setText(String.format(Locale.getDefault(), "%.1f km/h", v));
+            txtDistancia.setText(String.format(Locale.getDefault(), "%.2f m", distanciaTotal));
+            txtVelocidadeMax.setText(String.format(Locale.getDefault(), "%.1f km/h", velocidadeMax));
+
+            long t = SystemClock.elapsedRealtime() - tempoInicio;
+            txtTempo.setText(formatarTempo(t));
+
+            double kcal = calcularGastoCalorico(distanciaTotal, usuario.getPeso());
+            txtKcal.setText(String.format(Locale.getDefault(), "%.1f kcal", kcal));
         }
-        ultimaLocation = loc;
 
-        //aq é m/s
-        float velocidade = loc.getSpeed();
-        float velocidadeKmH = velocidade * 3.6f;
-
-        if (velocidadeKmH > velocidadeMax)
-            velocidadeMax = velocidadeKmH;
-
-        double kcal = distanciaTotal * 0.06;
-
-        pontoDAO.inserirPonto(trilha.getId(),
-                new PontoTrilha(
-                        loc.getLatitude(),
-                        loc.getLongitude(),
-                        velocidadeKmH,
-                        loc.getAccuracy(),
-                        DataUtil.getDataHoraAtual()
-                )
+        mMap.addPolyline(
+                new PolylineOptions().add(
+                        ultimaLocation == null ?
+                                pos :
+                                new LatLng(ultimaLocation.getLatitude(), ultimaLocation.getLongitude()),
+                        pos
+                ).width(8)
         );
 
-        txtVelocidade.setText(String.format("%.1f km/h", velocidadeKmH));
-        txtVelocidadeMax.setText(String.format("%.1f km/h", velocidadeMax));
-        txtDistancia.setText(String.format("%.1f m", distanciaTotal));
-        txtKcal.setText(String.format("%.1f kcal", kcal));
+        mMap.addCircle(
+                new CircleOptions()
+                        .center(pos)
+                        .radius(loc.getAccuracy())
+                        .strokeWidth(2f)
+        );
 
-        long tempoSegundos = (System.currentTimeMillis() - startTime) / 1000;
-        txtTempo.setText(formatarTempo(tempoSegundos));
+        pontoDAO.inserirPonto(trilhaId, new PontoTrilha(
+                loc.getLatitude(),
+                loc.getLongitude(),
+                loc.getSpeed(),
+                loc.getAccuracy(),
+                horaAtual()
+        ));
+
+        ultimaLocation = loc;
     }
 
-    private void finalizarTrilha() {
-
-        trilha.setDataFim(DataUtil.getDataAtual());
-        trilha.setHoraFim(DataUtil.getHoraAtual());
-        trilha.setDistanciaPercorrida(distanciaTotal);
-        trilha.setVelocidadeMaxima(velocidadeMax);
-        trilha.setVelocidadeMedia(distanciaTotal / ((System.currentTimeMillis() - startTime) / 1000f));
-        trilha.setGastoKcal(distanciaTotal * 0.06);
-
-        trilhaDAO.atualizarTrilha(trilha);
-
-        locationClient.removeLocationUpdates(locationCallback);
-
-        Toast.makeText(this, "Trilha finalizada e salva!", Toast.LENGTH_LONG).show();
-
-        finish();
+    private String dataAtual() {
+        return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
     }
 
-    private String formatarTempo(long s) {
-        long h = s / 3600;
-        long m = (s % 3600) / 60;
-        long sec = s % 60;
-        return String.format("%02d:%02d:%02d", h, m, sec);
+    private String horaAtual() {
+        return new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+    }
+
+    private String formatarTempo(long ms) {
+        int s = (int) (ms / 1000) % 60;
+        int m = (int) (ms / 60000) % 60;
+        int h = (int) (ms / 3600000);
+
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", h, m, s);
+    }
+
+    private double calcularGastoCalorico(double distanciaMetros, double pesoKg) {
+        double distanciaKm = distanciaMetros / 1000.0;
+        return distanciaKm * pesoKg * 0.7;
+    }
+
+       private boolean temPermissao() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void pedirPermissao() {
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                REQ_LOCATION
+        );
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] p, @NonNull int[] g) {
+        super.onRequestPermissionsResult(requestCode, p, g);
+        if (requestCode == REQ_LOCATION && temPermissao()) {
+            iniciarLocalizacao();
+        }
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
+        String mapType = prefs.getString("mapType", "vetorial");
+        if ("satellite".equals(mapType)) {
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        } else {
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 }
