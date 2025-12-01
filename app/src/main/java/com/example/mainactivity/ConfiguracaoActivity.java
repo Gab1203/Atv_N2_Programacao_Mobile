@@ -28,6 +28,7 @@ public class ConfiguracaoActivity extends AppCompatActivity {
     private EditText altura;
     private EditText peso;
     private Button btnSalvar;
+    private Button btnVoltar;
     private UsuarioDAO usuarioDAO;
 
     private RadioGroup mapGroup;
@@ -46,6 +47,7 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         altura = findViewById(R.id.altura);
         peso = findViewById(R.id.pesoUsuario);
         btnSalvar = findViewById(R.id.btnSalvar);
+        btnVoltar = findViewById(R.id.btnVoltar);
 
         mapGroup = findViewById(R.id.map_group);
         navGroup = findViewById(R.id.nav_group);
@@ -56,6 +58,7 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         carregarPreferencias();
 
         btnSalvar.setOnClickListener(v -> salvar());
+        btnVoltar.setOnClickListener(v -> finish());
     }
 
     private void carregarPreferencias() {
@@ -153,5 +156,6 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         ed.apply();
 
         Toast.makeText(this, getString(R.string.configuracoes_salvas), Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
