@@ -133,7 +133,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         trilha.setVelocidadeMaxima(velocidadeMax);
 
         long timeElapsed = SystemClock.elapsedRealtime() - tempoInicio;
-        double horas = timeElapsed / 3600000.0;
+        double horas = (double) timeElapsed / (3600 * 1000);
         double vm = distanciaTotal / horas;
         trilha.setVelocidadeMedia(vm);
 
@@ -183,10 +183,10 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     private void atualizarLocalizacao(Location loc) {
         if (loc == null || !trilhaIniciada) return;
 
-    LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+        LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+        SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
 
-     SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
-    String navMode = prefs.getString("navMode", "north_up");
+        String navMode = prefs.getString("navMode", "north_up");
     float zoom = 18f;
     if ("course_up".equals(navMode) && ultimaLocation != null) {
         float bearing = ultimaLocation.bearingTo(loc);

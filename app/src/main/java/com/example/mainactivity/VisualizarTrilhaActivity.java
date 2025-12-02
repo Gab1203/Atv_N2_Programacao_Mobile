@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
+import java.util.Locale;
 
 public class VisualizarTrilhaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -71,21 +72,24 @@ public class VisualizarTrilhaActivity extends AppCompatActivity implements OnMap
                         " " + trilhaSelecionada.getHoraInicio()
         );
 
-        tvDistancia.setText("Distância: " + trilhaSelecionada.getDistanciaPercorrida() + " m");
+        tvDistancia.setText("Distância: " +  String.format(Locale.getDefault(),
+                "%.2f m", trilhaSelecionada.getDistanciaPercorrida()));
 
         String duracao = trilhaSelecionada.getHoraInicio() + " → " + trilhaSelecionada.getHoraFim();
         tvDuracao.setText("Duração: " + duracao);
 
-        tvVelocidade.setText("Velocidade média: " + trilhaSelecionada.getVelocidadeMedia() + " km/h");
+        tvVelocidade.setText("Velocidade média: " + String.format(Locale.getDefault(),
+                "%.2f km/h", trilhaSelecionada.getVelocidadeMedia()));
 
-        tvVelocidadeMax.setText("Velocidade máxima: " + trilhaSelecionada.getVelocidadeMaxima() + " km/h");
+        tvVelocidadeMax.setText("Velocidade máxima: " + String.format(Locale.getDefault(),
+                "%.2f km/h", trilhaSelecionada.getVelocidadeMaxima()));
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.map = googleMap;
 
-         SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
         String mapType = prefs.getString("mapType", "vetorial");
         if ("satellite".equals(mapType)) {
             map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
