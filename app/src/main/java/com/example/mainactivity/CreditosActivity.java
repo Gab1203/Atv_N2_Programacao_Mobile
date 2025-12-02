@@ -16,12 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 public class CreditosActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { // Método onCreate pra inicializar componetes e carregar o layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creditos);
         gitHubUsername();
     }
-    public void gitHubUsername(){
+    public void gitHubUsername(){ // Exibição dos nomes e perfis do GitHub dos componentes da equipe
         TextView textViewG = (TextView)findViewById(R.id.Gabriel);
         TextView textViewJH = (TextView)findViewById(R.id.JH);
         TextView textViewJW = (TextView)findViewById(R.id.JW);
