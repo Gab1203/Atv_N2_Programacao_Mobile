@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mainactivity.TrilhaAdapter;
 import com.example.mainactivity.dao.TrilhaDAO;
+import com.example.mainactivity.db.DbHelper;
 import com.example.mainactivity.model.Trilha;
 
 import java.text.SimpleDateFormat;
@@ -111,18 +112,19 @@ public class ConsultarTrilha extends AppCompatActivity {
     }
 
     private void confirmarExclusaoTotal() {
-        // Exibe um Dialog para confirmação se dejesa excluir todas as trilhas
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.excluir_tudo_titulo))
                 .setMessage(getString(R.string.excluir_tudo_msg))
                 .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
-                    getDatabasePath("trilhas.db").delete();
+                    trilhaDAO.excluirTodas();
+
                     Toast.makeText(this, getString(R.string.todas_trilhas_apagadas), Toast.LENGTH_SHORT).show();
                     carregarTrilhas();
                 })
                 .setNegativeButton(getString(R.string.cancelar), null)
                 .show();
     }
+
 
     private void visualizarTrilha(Trilha trilha) {  // Abre a activity para visualizar a trilha no mapa da API
         Intent i = new Intent(this, VisualizarTrilhaActivity.class);
@@ -169,21 +171,17 @@ public class ConsultarTrilha extends AppCompatActivity {
                 .show();
     }
 
-    private void apagarUmaTrilha(long id) {
         /**
          * Exclui uma trilha específica e seus pontos do banco de dados
          * Remove dados tanto da tabela principal quanto da tabela de pontos
          */
-        getWritableDatabase().execSQL("DELETE FROM trilha WHERE id = " + id);
-        getWritableDatabase().execSQL("DELETE FROM trilha_pontos WHERE trilha_id = " + id);
+        private void apagarUmaTrilha(long id) {
+            trilhaDAO.excluirPorId(id);
 
-        Toast.makeText(this, getString(R.string.trilha_apagada), Toast.LENGTH_SHORT).show();
-        carregarTrilhas();
-    }
+            Toast.makeText(this, getString(R.string.trilha_apagada), Toast.LENGTH_SHORT).show();
+            carregarTrilhas();
+        }
 
-    private SQLiteDatabase getWritableDatabase() { //  Retorna instância di SQlite para escrita para inserir, atualizar ou excluir dados
-        return new com.example.mainactivity.db.DbHelper(this).getWritableDatabase();
-    }
 
     private void escolherIntervaloExclusao() {
         /**
