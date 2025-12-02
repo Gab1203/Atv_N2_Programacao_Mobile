@@ -209,12 +209,14 @@ public class ConsultarTrilha extends AppCompatActivity {
                             c2.get(Calendar.MONTH),
                             c2.get(Calendar.DAY_OF_MONTH)
                     );
+                    dpEnd.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dpEnd.show();
                 },
                 c.get(Calendar.YEAR),
                 c.get(Calendar.MONTH),
                 c.get(Calendar.DAY_OF_MONTH)
         );
+        dpStart.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpStart.show();
     }
 
