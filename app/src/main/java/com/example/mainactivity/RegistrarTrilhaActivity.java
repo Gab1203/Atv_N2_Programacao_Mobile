@@ -91,6 +91,9 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         btnIniciar.setOnClickListener(v -> iniciarTrilha());
         btnFinalizar.setOnClickListener(v -> finalizarTrilha());
 
+        btnIniciar.setEnabled(true);
+        btnFinalizar.setEnabled(false);
+
         locationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
@@ -100,6 +103,8 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
             return;
         }
 
+        btnIniciar.setEnabled(false);
+        btnFinalizar.setEnabled(true);
         trilha = new Trilha();
         trilha.setNome("Trilha " + new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
         trilha.setDataInicio(dataAtual());
