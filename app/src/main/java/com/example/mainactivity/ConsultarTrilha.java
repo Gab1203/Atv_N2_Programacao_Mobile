@@ -33,10 +33,11 @@ public class ConsultarTrilha extends AppCompatActivity {
     private TrilhaAdapter adapter;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) { // Método "onCreate" para carregar o layout de Configuração e os componentes
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consultar_trilha);
 
+        // Inicializa o DAO das trilhas armazenadas do banco de dados
         trilhaDAO = new TrilhaDAO(this);
 
         recyclerView = findViewById(R.id.recyclerTrilhas);
@@ -51,10 +52,11 @@ public class ConsultarTrilha extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        carregarTrilhas(); // pra atualizar quando voltar
+        carregarTrilhas(); // pra atualizar a lista quando a atividade voltar
     }
 
     private void carregarTrilhas() {
+        // Define a variavel para receber todos os dados e configurar o adapter
         listaTrilhas = trilhaDAO.listar();
 
         adapter = new TrilhaAdapter(
@@ -87,9 +89,12 @@ public class ConsultarTrilha extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void abrirMenuOpcoes(View v) {
+    private void abrirMenuOpcoes(View v) {// Abre o meu pop-up com as opções para excluir as trilhas e por intervalo de datas
+
         PopupMenu menu = new PopupMenu(this, v);
+        // Exclui todos os dados das trilhas
         menu.getMenu().add(getString(R.string.menu_excluir_tudo));
+        // Exclui dados por intervalo de datas
         menu.getMenu().add(getString(R.string.menu_excluir_intervalo));
 
         menu.setOnMenuItemClickListener(item -> {
@@ -106,6 +111,7 @@ public class ConsultarTrilha extends AppCompatActivity {
     }
 
     private void confirmarExclusaoTotal() {
+        // Exibe um Dialog para confirmação se dejesa excluir todas as trilhas
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.excluir_tudo_titulo))
                 .setMessage(getString(R.string.excluir_tudo_msg))
@@ -118,19 +124,19 @@ public class ConsultarTrilha extends AppCompatActivity {
                 .show();
     }
 
-    private void visualizarTrilha(Trilha trilha) {
+    private void visualizarTrilha(Trilha trilha) {  // Abre a activity para visualizar a trilha no mapa da API
         Intent i = new Intent(this, VisualizarTrilhaActivity.class);
         i.putExtra("trilha_id", trilha.getId());
         startActivity(i);
     }
 
-    private void editarTrilha(Trilha trilha) {
+    private void editarTrilha(Trilha trilha) { // Abre a activity para editar o NOME triplha no mapa da API
         Intent i = new Intent(this, EditarTrilhaActivity.class);
         i.putExtra("trilha_id", trilha.getId());
         startActivity(i);
     }
 
-    private void compartilharTrilha(Trilha trilha) {
+    private void compartilharTrilha(Trilha trilha) { // Compartilha a trilha através de um JSON
         try {
             String json = trilha.toJson();
 
@@ -148,7 +154,12 @@ public class ConsultarTrilha extends AppCompatActivity {
 
 
     private void excluirTrilha(Trilha trilha) {
+        /**
+         * Exibe um Dialog para exibir uma mensagem de confirmação de exclusão de uma
+         * trilha específica
+         */
         new AlertDialog.Builder(this)
+
                 .setTitle(getString(R.string.excluir_trilha_titulo))
                 .setMessage(String.format(getString(R.string.excluir_trilha_msg), trilha.getNome()))
                 .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
@@ -159,6 +170,10 @@ public class ConsultarTrilha extends AppCompatActivity {
     }
 
     private void apagarUmaTrilha(long id) {
+        /**
+         * Exclui uma trilha específica e seus pontos do banco de dados
+         * Remove dados tanto da tabela principal quanto da tabela de pontos
+         */
         getWritableDatabase().execSQL("DELETE FROM trilha WHERE id = " + id);
         getWritableDatabase().execSQL("DELETE FROM trilha_pontos WHERE trilha_id = " + id);
 
@@ -166,18 +181,23 @@ public class ConsultarTrilha extends AppCompatActivity {
         carregarTrilhas();
     }
 
-    private SQLiteDatabase getWritableDatabase() {
+    private SQLiteDatabase getWritableDatabase() { //  Retorna instância di SQlite para escrita para inserir, atualizar ou excluir dados
         return new com.example.mainactivity.db.DbHelper(this).getWritableDatabase();
     }
 
     private void escolherIntervaloExclusao() {
+        /**
+         * Função que permite a funcionalidade de excluir dados por intervalo de datas
+         * Abre dois DatePickerDialogs para selecionar data inicial e final
+         */
         final Calendar c = Calendar.getInstance();
+        // Primeiro DatePicker para data inicial (dpStart)
         DatePickerDialog dpStart = new DatePickerDialog(
                 this,
                 (view, year, month, dayOfMonth) -> {
                     String inicio = String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year);
 
-                    // depois do start, selecionar end
+                    // depois do start, seleciona a data final dspEnd)
                     final Calendar c2 = Calendar.getInstance();
                     DatePickerDialog dpEnd = new DatePickerDialog(
                             this,
@@ -199,11 +219,14 @@ public class ConsultarTrilha extends AppCompatActivity {
     }
 
     private void confirmarExclusaoIntervalo(String inicio, String fim) {
+        /**
+         * Exibe Dialog de confirmação para excluir trilhas no intervalo selecionado
+         */
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.excluir_intervalo_titulo))
                 .setMessage(String.format(getString(R.string.excluir_intervalo_msg), inicio, fim))
                 .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
-                    // delegar para DAO
+                    // Delega para DAO a exclusão
                     trilhaDAO.apagarPorIntervalo(inicio, fim);
                     Toast.makeText(this, getString(R.string.trilhas_intervalo_apagadas), Toast.LENGTH_SHORT).show();
                     carregarTrilhas();

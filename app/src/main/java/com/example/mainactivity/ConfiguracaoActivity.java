@@ -37,10 +37,11 @@ public class ConfiguracaoActivity extends AppCompatActivity {
     private static final String PREFS = "app_config";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {     // Método "onCreate" para carregar o layout de Configuração
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracao);
 
+        //Inicializa os componenetes do layout
         nomeUsuario = findViewById(R.id.nomeUsuario);
         dataNascimento = findViewById(R.id.data_nascimento);
         sexo = findViewById(R.id.sexo);
@@ -52,16 +53,19 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         mapGroup = findViewById(R.id.map_group);
         navGroup = findViewById(R.id.nav_group);
 
-        usuarioDAO = new UsuarioDAO(this);
+        usuarioDAO = new UsuarioDAO(this); //Inicializa o DAO do usuário pra uso do banco de Dados
 
-        carregarUsuarioSalvo();
-        carregarPreferencias();
+
+        carregarUsuarioSalvo(); // Carrega os dados do usuário
+        carregarPreferencias(); // Carrega os dados salvos no SharedPreferences
 
         btnSalvar.setOnClickListener(v -> salvar());
         btnVoltar.setOnClickListener(v -> finish());
     }
 
-    private void carregarPreferencias() {
+    private void carregarPreferencias() { // Método que define o SharedPreferences para persistência de dados das opções de Satélite
+
+
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         String mapType = prefs.getString("mapType", "vetorial");
         String navMode = prefs.getString("navMode", "north_up");
@@ -79,13 +83,14 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         }
     }
 
-    private void carregarUsuarioSalvo() {
+    private void carregarUsuarioSalvo() {// Busca os dados do usuário no "UsuárioDAO", caso existam, preenche os campos do formulário
         Usuario u = usuarioDAO.buscarPrimeiroUsuario();
 
         if (u == null) return;
 
         nomeUsuario.setText(u.getNome());
         dataNascimento.setText(u.getDataNascimento());
+
 
         if (u.getSexo().equalsIgnoreCase("Masculino")) {
             sexo.check(R.id.sexo_masculino);
@@ -97,7 +102,7 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         peso.setText(String.valueOf(u.getPeso()));
     }
 
-    private void salvar() {
+    private void salvar() { // Salva os dados do usuário e retorna uma mensagem de erro caso algum input obrigatório fique vazio
         int idSexo = sexo.getCheckedRadioButtonId();
 
         if (nomeUsuario.getText().toString().trim().isEmpty()) {
@@ -120,14 +125,15 @@ public class ConfiguracaoActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.informe_altura_peso), Toast.LENGTH_SHORT).show();
             return;
         }
-
+        // Obtém o dado do sexo do usuário
         RadioButton rb = findViewById(idSexo);
         String sexoStr = rb.getText().toString();
 
+        // Converse o valor da altura e peso em double
         double alturaVal = Double.parseDouble(altura.getText().toString());
         double pesoVal = Double.parseDouble(peso.getText().toString());
 
-        Usuario usuario = new Usuario();
+        Usuario usuario = new Usuario(); // Cria o novo usuário com seus dados pessoais associando-os ao ID
         usuario.setNome(nomeUsuario.getText().toString());
         usuario.setDataNascimento(dataNascimento.getText().toString());
         usuario.setSexo(sexoStr);
@@ -140,10 +146,12 @@ public class ConfiguracaoActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         SharedPreferences.Editor ed = prefs.edit();
 
+        // Salva o tipo de mapa
         int mapId = mapGroup.getCheckedRadioButtonId();
         if (mapId == R.id.map_satelite) ed.putString("mapType", "satellite");
         else ed.putString("mapType", "vetorial");
 
+        // Salva o tipo de navegação
         int navId = navGroup.getCheckedRadioButtonId();
         if (navId == R.id.nav_course_up) ed.putString("navMode", "course_up");
         else ed.putString("navMode", "north_up");
