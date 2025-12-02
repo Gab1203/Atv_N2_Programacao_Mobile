@@ -136,12 +136,19 @@ public class TrilhaDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Trilha> trilhas = new ArrayList<>();
 
-        try(Cursor c = db.rawQuery("SELECT * FROM trilha ORDER BY id DESC", null)) {
-            while (c.moveToNext()) {
-                trilhas.add(cursorParaTrilha(c));
+        try{
+
+            try(Cursor c = db.rawQuery("SELECT * FROM trilha ORDER BY id DESC", null)) {
+                while (c.moveToNext()) {
+                    trilhas.add(cursorParaTrilha(c));
+                }
+
+                c.close();
+                db.close();
             }
-            c.close();
-            db.close();
+
+        }catch (Exception e){
+            Log.e("", e.getMessage());
         }
         return trilhas;
     }

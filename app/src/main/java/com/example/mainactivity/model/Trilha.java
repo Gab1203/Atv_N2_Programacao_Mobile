@@ -1,5 +1,10 @@
 package com.example.mainactivity.model;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.example.mainactivity.dao.PontoTrilhaDAO;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,9 +24,11 @@ public class Trilha {
     private double velocidadeMaxima;
     private List<PontoTrilha> pontos = new ArrayList<>();
 
-    public String toJson() {
+    public String toJson(PontoTrilhaDAO pontoTrilhaDAO) {
         try {
             JSONObject obj = new JSONObject();
+
+            pontos = pontoTrilhaDAO.listarPontos(id);
 
             obj.put("id", id);
             obj.put("nome", nome);
@@ -36,7 +43,8 @@ public class Trilha {
             obj.put("velocidadeMaxima", velocidadeMaxima);
             obj.put("gastoKcal", gastoKcal);
 
-            //todoa os pontos percorridos
+
+            //todos os pontos percorridos
             JSONArray pontosArray = new JSONArray();
             for (PontoTrilha p : pontos) {
                 JSONObject pObj = new JSONObject();
@@ -49,7 +57,10 @@ public class Trilha {
                 pontosArray.put(pObj);
             }
 
+
             obj.put("pontos", pontosArray);
+
+            Log.d("TrilhaString", obj.toString());
 
             return obj.toString(4);
         } catch (Exception e) {

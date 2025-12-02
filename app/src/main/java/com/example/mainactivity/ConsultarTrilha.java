@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mainactivity.TrilhaAdapter;
+import com.example.mainactivity.dao.PontoTrilhaDAO;
 import com.example.mainactivity.dao.TrilhaDAO;
 import com.example.mainactivity.db.DbHelper;
 import com.example.mainactivity.model.Trilha;
@@ -34,6 +36,7 @@ public class ConsultarTrilha extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TrilhaDAO trilhaDAO;
+    private PontoTrilhaDAO pontoTrilhaDAO;
     private List<Trilha> listaTrilhas;
     private TrilhaAdapter adapter;
 
@@ -42,14 +45,15 @@ public class ConsultarTrilha extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consultar_trilha);
 
-        // Inicializa o DAO das trilhas armazenadas do banco de dados
+        // Inicializa a DAO das trilhas armazenadas do banco de dados
         trilhaDAO = new TrilhaDAO(this);
+        pontoTrilhaDAO = new PontoTrilhaDAO(this);
 
         recyclerView = findViewById(R.id.recyclerTrilhas);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    ImageButton btnMenu = findViewById(R.id.btnMenu);
-    btnMenu.setOnClickListener(this::abrirMenuOpcoes);
+        ImageButton btnMenu = findViewById(R.id.btnMenu);
+        btnMenu.setOnClickListener(this::abrirMenuOpcoes);
 
         carregarTrilhas();
     }
@@ -89,7 +93,6 @@ public class ConsultarTrilha extends AppCompatActivity {
                     }
                 }
         );
-
 
         recyclerView.setAdapter(adapter);
     }
@@ -144,7 +147,10 @@ public class ConsultarTrilha extends AppCompatActivity {
 
     private void compartilharTrilha(Trilha trilha) { // Compartilha a trilha através de um JSON
         try {
-            String json = trilha.toJson();
+            String json = trilha.toJson(pontoTrilhaDAO);
+
+           /* Log.d("TrilhaString", json);
+            Log.d("TrilhaJson", json);*/
 
             File file = new File(getCacheDir(), "trilha_" + trilha.getId() + ".json");
 
