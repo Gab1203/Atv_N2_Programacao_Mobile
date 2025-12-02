@@ -79,6 +79,7 @@ public class EditarTrilhaActivity extends AppCompatActivity {
                 c.get(Calendar.MONTH),
                 c.get(Calendar.DAY_OF_MONTH)
         );
+        dp.getDatePicker().setMaxDate(System.currentTimeMillis());
         dp.show();
     }
 
