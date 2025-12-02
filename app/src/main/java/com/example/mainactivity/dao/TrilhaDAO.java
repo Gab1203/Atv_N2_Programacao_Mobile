@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.mainactivity.db.DbHelper;
 import com.example.mainactivity.model.Trilha;
@@ -89,17 +91,19 @@ public class TrilhaDAO {
 
     public Trilha buscarPorId(long id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Trilha t;
 
-        Cursor c = db.rawQuery("SELECT * FROM trilha WHERE id = ?", new String[]{String.valueOf(id)});
-        if (c.moveToFirst()) {
-            Trilha t = cursorParaTrilha(c);
-            c.close();
-            db.close();
-            return t;
+        try(Cursor c = db.rawQuery("SELECT * FROM trilha WHERE id = ?", new String[]{String.valueOf(id)})) {
+            if (c.moveToFirst()) {
+                t = cursorParaTrilha(c);
+                Log.d("VisualizarTrilha",t.toString());
+                c.close();
+                db.close();
+                return t;
+            }
+        }catch (Exception e){
+            Log.d("VisualizarTrilha",e.getMessage());
         }
-
-        c.close();
-        db.close();
         return null;
     }
 
@@ -107,13 +111,13 @@ public class TrilhaDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Trilha> trilhas = new ArrayList<>();
 
-        Cursor c = db.rawQuery("SELECT * FROM trilha ORDER BY id DESC", null);
-        while (c.moveToNext()) {
-            trilhas.add(cursorParaTrilha(c));
+        try(Cursor c = db.rawQuery("SELECT * FROM trilha ORDER BY id DESC", null)) {
+            while (c.moveToNext()) {
+                trilhas.add(cursorParaTrilha(c));
+            }
+            c.close();
+            db.close();
         }
-
-        c.close();
-        db.close();
         return trilhas;
     }
 

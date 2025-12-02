@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         visualizarTrilhaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), VisualizarTrilhaActivity.class));
+                startActivity(new Intent(getApplicationContext(), ConsultarTrilha.class));
             }
         });
     }
