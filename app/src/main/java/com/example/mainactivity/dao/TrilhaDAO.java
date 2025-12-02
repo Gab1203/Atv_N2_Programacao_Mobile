@@ -26,10 +26,12 @@ public class TrilhaDAO {
     }
 
     public void apagarPorIntervalo(String inicio, String fim) {
-        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat formatInput = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat formatSql = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
         try {
-            Date dInicio = fmt.parse(inicio);
-            Date dFim = fmt.parse(fim);
+            Date dInicio = formatInput.parse(inicio);
+            Date dFim = formatInput.parse(fim);
 
             if (dInicio == null || dFim == null) return;
 
@@ -39,27 +41,50 @@ public class TrilhaDAO {
                 dFim = tmp;
             }
 
+            String inicioSql = formatSql.format(dInicio);
+            String fimSql = formatSql.format(dFim);
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            List<Trilha> todas = listar();
-            for (Trilha t : todas) {
-                try {
-                    Date d = fmt.parse(t.getDataInicio());
-                    if (d != null && !d.before(dInicio) && !d.after(dFim)) {
-                        db.delete(DbHelper.TABLE_TRILHA, "id = ?", new String[]{String.valueOf(t.getId())});
-                        db.delete("trilha_pontos", "trilha_id = ?", new String[]{String.valueOf(t.getId())});
-                    }
-                } catch (ParseException e) {
+            // remove todos os pontos vinculados às trilhas que serão apagadas
+            db.execSQL(
+                    "DELETE FROM trilha_pontos WHERE trilha_id IN (" +
+                            "SELECT id FROM trilha WHERE date(data_inicio) BETWEEN date(?) AND date(?)" +
+                            ")",
+                    new Object[]{inicioSql, fimSql}
+            );
 
-                }
-            }
+            // remove as trilhas
+            db.execSQL(
+                    "DELETE FROM trilha WHERE date(data_inicio) BETWEEN date(?) AND date(?)",
+                    new Object[]{inicioSql, fimSql}
+            );
 
             db.close();
 
-        } catch (ParseException e) {
-
+        } catch (Exception e) {
+            Log.e("TrilhaDAO", "Erro ao apagar trilhas por intervalo: " + e.getMessage());
         }
     }
+
+    public void excluirPorId(long id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("trilha_pontos", "trilha_id = ?", new String[]{String.valueOf(id)});
+        db.delete(DbHelper.TABLE_TRILHA, "id = ?", new String[]{String.valueOf(id)});
+
+        db.close();
+    }
+
+    public void excluirTodas() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("trilha_pontos", null, null);
+        db.delete(DbHelper.TABLE_TRILHA, null, null);
+
+        db.close();
+    }
+
 
     public long inserirTrilha(Trilha trilha) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
