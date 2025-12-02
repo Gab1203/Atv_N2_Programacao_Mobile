@@ -3,6 +3,7 @@ package com.example.mainactivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +22,8 @@ import com.example.mainactivity.dao.TrilhaDAO;
 import com.example.mainactivity.db.DbHelper;
 import com.example.mainactivity.model.Trilha;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -142,10 +146,21 @@ public class ConsultarTrilha extends AppCompatActivity {
         try {
             String json = trilha.toJson();
 
-            Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, json);
-            sendIntent.setType("application/json");
+            File file = new File(getCacheDir(), "trilha_" + trilha.getId() + ".json");
 
+            try(FileOutputStream fileOutputStream = new FileOutputStream(file)){
+                fileOutputStream.write(json.getBytes());
+            }
+            Uri uri = FileProvider.getUriForFile(
+                    this,
+                    getApplicationContext().getPackageName() + ".provider",
+                    file
+            );
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.setType("application/json");
+            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Intent shareIntent = Intent.createChooser(sendIntent, getString(R.string.compartilhar_trilha));
             startActivity(shareIntent);
 
