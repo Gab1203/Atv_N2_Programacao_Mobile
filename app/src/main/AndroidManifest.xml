@@ -38,11 +38,15 @@
         <activity
             android:name=".VisualizarTrilhaActivity"
             android:exported="false"
-            android:label="@string/title_activity_visualizar" />
+            android:label="@string/title_activity_visualizar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".RegistrarTrilhaActivity"
             android:exported="false"
-            android:label="@string/title_activity_registrar_trilha" />
+            android:label="@string/title_activity_registrar_trilha"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".ConfiguracaoActivity"
             android:exported="false" />
