@@ -13,13 +13,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class CreditosActivity extends AppCompatActivity {
+    private FloatingActionButton btnVoltar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { // Método onCreate pra inicializar componetes e carregar o layout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creditos);
         gitHubUsername();
+        btnVoltar = findViewById(R.id.btnVoltar);
+
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     public void gitHubUsername(){ // Exibição dos nomes e perfis do GitHub dos componentes da equipe
         TextView textViewG = (TextView)findViewById(R.id.Gabriel);

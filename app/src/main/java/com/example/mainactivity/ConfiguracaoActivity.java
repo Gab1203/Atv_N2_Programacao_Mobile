@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mainactivity.dao.UsuarioDAO;
 import com.example.mainactivity.model.Usuario;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ConfiguracaoActivity extends AppCompatActivity {
     private EditText nomeUsuario;
@@ -35,6 +36,7 @@ public class ConfiguracaoActivity extends AppCompatActivity {
     private RadioGroup navGroup;
 
     private static final String PREFS = "app_config";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {     // Método "onCreate" para carregar o layout de Configuração
