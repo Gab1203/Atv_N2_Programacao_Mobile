@@ -3,6 +3,7 @@ package com.example.mainactivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -61,6 +63,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     private Location ultimaLocation;
     private double distanciaTotal = 0;
     private double velocidadeMax = 0;
+    private Circle precisionCircle;
 
     private long tempoInicio;
 
@@ -232,14 +235,20 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
                                 new LatLng(ultimaLocation.getLatitude(), ultimaLocation.getLongitude()),
                         pos
                 ).width(8)
+                        .color(Color.RED)
         );
 
-        mMap.addCircle(
-                new CircleOptions()
-                        .center(pos)
-                        .radius(loc.getAccuracy())
-                        .strokeWidth(2f)
-        );
+        if(precisionCircle == null){
+            CircleOptions circleOptions = new CircleOptions()
+                    .center(pos)
+                    .radius(loc.getAccuracy())
+                    .strokeWidth(2f);
+
+            precisionCircle = mMap.addCircle(circleOptions);
+        }else{
+            precisionCircle.setCenter(pos);
+            precisionCircle.setRadius(loc.getAccuracy());
+        }
 
         pontoDAO.inserirPonto(trilhaId, new PontoTrilha(
                 loc.getLatitude(),
