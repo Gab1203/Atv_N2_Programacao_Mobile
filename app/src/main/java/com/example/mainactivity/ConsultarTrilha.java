@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.example.mainactivity.dao.PontoTrilhaDAO;
 import com.example.mainactivity.dao.TrilhaDAO;
 import com.example.mainactivity.db.DbHelper;
 import com.example.mainactivity.model.Trilha;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +41,7 @@ public class ConsultarTrilha extends AppCompatActivity {
     private PontoTrilhaDAO pontoTrilhaDAO;
     private List<Trilha> listaTrilhas;
     private TrilhaAdapter adapter;
+    private FloatingActionButton btnVoltar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) { // Método "onCreate" para carregar o layout de Configuração e os componentes
@@ -51,11 +54,19 @@ public class ConsultarTrilha extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerTrilhas);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        btnVoltar = findViewById(R.id.btnVoltar);
+
 
         ImageButton btnMenu = findViewById(R.id.btnMenu);
         btnMenu.setOnClickListener(this::abrirMenuOpcoes);
 
         carregarTrilhas();
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -255,4 +266,6 @@ public class ConsultarTrilha extends AppCompatActivity {
                 .setNegativeButton(getString(R.string.cancelar), null)
                 .show();
     }
+
+
 }
