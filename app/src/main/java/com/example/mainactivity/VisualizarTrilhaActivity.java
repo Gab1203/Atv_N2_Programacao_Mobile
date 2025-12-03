@@ -1,5 +1,6 @@
 package com.example.mainactivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -103,7 +104,7 @@ public class VisualizarTrilhaActivity extends AppCompatActivity implements OnMap
 
         for (PontoTrilha p : pontos) {
             LatLng pos = new LatLng(p.getLatitude(), p.getLongitude());
-            poly.add(pos);
+            poly.add(pos).width(8).color(Color.RED);
         }
 
         map.addPolyline(poly);
