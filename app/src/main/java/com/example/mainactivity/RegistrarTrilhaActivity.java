@@ -2,11 +2,13 @@ package com.example.mainactivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +37,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import android.content.SharedPreferences;
 
 import java.text.SimpleDateFormat;
@@ -65,6 +69,8 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     private double velocidadeMax = 0;
     private Circle precisionCircle;
     private long tempoInicio;
+    private FloatingActionButton btnVoltar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +103,13 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         btnFinalizar.setEnabled(false);
 
         locationClient = LocationServices.getFusedLocationProviderClient(this);
+        btnVoltar = findViewById(R.id.btnVoltar);
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
        private void iniciarTrilha() {
