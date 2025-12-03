@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import android.content.SharedPreferences;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +65,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     private Location ultimaLocation;
     private double distanciaTotal = 0;
     private double velocidadeMax = 0;
+    private FloatingActionButton btnVoltar;
 
     private long tempoInicio;
 
@@ -97,6 +100,14 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         btnFinalizar.setEnabled(false);
 
         locationClient = LocationServices.getFusedLocationProviderClient(this);
+        btnVoltar = findViewById(R.id.btnVoltar);
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
        private void iniciarTrilha() {
