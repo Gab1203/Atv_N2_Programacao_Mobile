@@ -64,7 +64,6 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
     private double distanciaTotal = 0;
     private double velocidadeMax = 0;
     private Circle precisionCircle;
-
     private long tempoInicio;
 
     @Override
@@ -136,8 +135,8 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         trilha.setVelocidadeMaxima(velocidadeMax);
 
         long timeElapsed = SystemClock.elapsedRealtime() - tempoInicio;
-        double horas = (double) timeElapsed / (3600 * 1000);
-        double vm = distanciaTotal / horas;
+        double horas = (double) timeElapsed / (3600.0 * 1000.0);
+        double vm = (distanciaTotal / 1000.0) / horas;
         trilha.setVelocidadeMedia(vm);
 
         double kcal = calcularGastoCalorico(distanciaTotal, usuario.getPeso());
