@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.CameraPosition;
+
 import android.content.SharedPreferences;
 
 import java.text.SimpleDateFormat;
@@ -100,7 +101,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         locationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-       private void iniciarTrilha() {
+    private void iniciarTrilha() {
         if (usuario == null) {
             Toast.makeText(this, getString(R.string.configure_usuario_primeiro), Toast.LENGTH_LONG).show();
             return;
@@ -136,8 +137,9 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         trilha.setVelocidadeMaxima(velocidadeMax);
 
         long timeElapsed = SystemClock.elapsedRealtime() - tempoInicio;
-        double horas = (double) timeElapsed / (3600 * 1000);
-        double vm = distanciaTotal / horas;
+        //Considera hora de pelo menos 1 milissegundo
+        double horas = (double) Math.max(timeElapsed, 1000) / (3600.0 * 1000.0);
+        double vm = (distanciaTotal / 1000.0) / horas;
         trilha.setVelocidadeMedia(vm);
 
         double kcal = calcularGastoCalorico(distanciaTotal, usuario.getPeso());
@@ -190,25 +192,25 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         SharedPreferences prefs = getSharedPreferences("app_config", MODE_PRIVATE);
 
         String navMode = prefs.getString("navMode", "north_up");
-    float zoom = 18f;
-    if ("course_up".equals(navMode) && ultimaLocation != null) {
-        float bearing = ultimaLocation.bearingTo(loc);
-        CameraPosition camPos = new CameraPosition.Builder()
-            .target(pos)
-            .zoom(zoom)
-            .bearing(bearing)
-            .tilt(0)
-            .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
-    } else {
-        CameraPosition camPos = new CameraPosition.Builder()
-            .target(pos)
-            .zoom(zoom)
-            .bearing(0)
-            .tilt(0)
-            .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
-    }
+        float zoom = 18f;
+        if ("course_up".equals(navMode) && ultimaLocation != null) {
+            float bearing = ultimaLocation.bearingTo(loc);
+            CameraPosition camPos = new CameraPosition.Builder()
+                    .target(pos)
+                    .zoom(zoom)
+                    .bearing(bearing)
+                    .tilt(0)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+        } else {
+            CameraPosition camPos = new CameraPosition.Builder()
+                    .target(pos)
+                    .zoom(zoom)
+                    .bearing(0)
+                    .tilt(0)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
+        }
 
         if (ultimaLocation != null) {
             float d = ultimaLocation.distanceTo(loc); // metros
@@ -230,22 +232,22 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
 
         mMap.addPolyline(
                 new PolylineOptions().add(
-                        ultimaLocation == null ?
-                                pos :
-                                new LatLng(ultimaLocation.getLatitude(), ultimaLocation.getLongitude()),
-                        pos
-                ).width(8)
+                                ultimaLocation == null ?
+                                        pos :
+                                        new LatLng(ultimaLocation.getLatitude(), ultimaLocation.getLongitude()),
+                                pos
+                        ).width(8)
                         .color(Color.RED)
         );
 
-        if(precisionCircle == null){
+        if (precisionCircle == null) {
             CircleOptions circleOptions = new CircleOptions()
                     .center(pos)
                     .radius(loc.getAccuracy())
                     .strokeWidth(2f);
 
             precisionCircle = mMap.addCircle(circleOptions);
-        }else{
+        } else {
             precisionCircle.setCenter(pos);
             precisionCircle.setRadius(loc.getAccuracy());
         }
@@ -282,7 +284,7 @@ public class RegistrarTrilhaActivity extends FragmentActivity implements OnMapRe
         return distanciaKm * pesoKg * 0.7;
     }
 
-       private boolean temPermissao() {
+    private boolean temPermissao() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
     }
