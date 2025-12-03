@@ -3,6 +3,7 @@ package com.example.mainactivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +33,7 @@ public class VisualizarTrilhaActivity extends AppCompatActivity implements OnMap
 
     private Trilha trilhaSelecionada;
     private List<PontoTrilha> pontos;
+    private FloatingActionButton btnVoltar;
 
     private TextView tvNome, tvData, tvDistancia, tvDuracao, tvVelocidade, tvVelocidadeMax;
 
@@ -61,6 +64,13 @@ public class VisualizarTrilhaActivity extends AppCompatActivity implements OnMap
 
         if (mapFragment != null)
             mapFragment.getMapAsync(this);
+        btnVoltar = findViewById(R.id.btnVoltar);
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void preencherInfoTrilha() {
